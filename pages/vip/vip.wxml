@@ -149,9 +149,9 @@
   <view class="modal {{showPayModal ? 'show' : ''}}" bindtap="closeModal">
     <view class="modal-content" catchtap="stopPropagation">
       <view class="modal-title">确认支付</view>
-      <view class="modal-text" wx:if="{{selectedPlan}}">
-        <view>套餐：{{vipPlans.find(p => p.id === selectedPlan).name}}</view>
-        <view>价格：¥{{vipPlans.find(p => p.id === selectedPlan).price}}</view>
+      <view class="modal-text" wx:if="{{selectedPlanInfo}}">
+        <view>套餐：{{selectedPlanInfo.name}}</view>
+        <view>价格：¥{{selectedPlanInfo.price}}</view>
       </view>
       <view class="modal-buttons">
         <button class="btn-secondary" bindtap="closeModal">取消</button>

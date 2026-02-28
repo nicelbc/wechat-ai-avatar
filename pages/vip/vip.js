@@ -61,7 +61,8 @@ Page({
     ],
     selectedPlan: 'month',
     showPayModal: false,
-    isLoading: false
+    isLoading: false,
+    selectedPlanInfo: null
   },
 
   onLoad() {
@@ -76,10 +77,12 @@ Page({
   initData() {
     const userInfo = app.globalData.userInfo;
     const isVip = app.globalData.isVip;
+    const selectedPlanInfo = this.data.vipPlans.find(p => p.id === this.data.selectedPlan);
 
     this.setData({
       userInfo,
-      isVip
+      isVip,
+      selectedPlanInfo
     });
 
     // 如果已登录，获取VIP信息
@@ -116,7 +119,11 @@ Page({
   // 选择套餐
   selectPlan(e) {
     const { plan } = e.currentTarget.dataset;
-    this.setData({ selectedPlan: plan });
+    const selectedPlanInfo = this.data.vipPlans.find(p => p.id === plan);
+    this.setData({
+      selectedPlan: plan,
+      selectedPlanInfo: selectedPlanInfo
+    });
   },
 
   // 购买VIP

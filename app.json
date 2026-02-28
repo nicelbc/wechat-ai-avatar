@@ -45,10 +45,5 @@
       }
     ]
   },
-  "permission": {
-    "scope.userInfo": {
-      "desc": "用于完善用户资料"
-    }
-  },
   "sitemapLocation": "sitemap.json"
 }
