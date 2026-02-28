@@ -1,0 +1,149 @@
+<!-- pages/generate/generate.wxml -->
+<view class="container">
+  <!-- 生成参数设置 -->
+  <view class="card fade-in">
+    <view class="title">生成参数</view>
+
+    <!-- 描述词输入 -->
+    <view class="input-group">
+      <view class="input-label">描述词</view>
+      <textarea class="input" placeholder="请输入描述词，例如：一个穿着汉服的少女，站在樱花树下" value="{{prompt}}" bindinput="onPromptInput" maxlength="200"></textarea>
+      <view class="input-hint">描述越详细，生成效果越好</view>
+    </view>
+
+    <!-- 预设风格 -->
+    <view class="preset-section">
+      <view class="subtitle">推荐风格</view>
+      <view class="preset-tags">
+        <view class="preset-tag" wx:for="{{presetStyles[style].presets}}" wx:for-index="idx" wx:key="idx" bindtap="selectPreset" data-prompt="{{item.prompt}}">
+          <text class="preset-icon">{{item.icon}}</text>
+          <text class="preset-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 尺寸选择 -->
+    <view class="setting-row" bindtap="showSizeModal">
+      <view class="setting-label">尺寸</view>
+      <view class="setting-value">{{size}}</view>
+      <view class="setting-arrow">></view>
+    </view>
+
+    <!-- 数量选择 -->
+    <view class="setting-row">
+      <view class="setting-label">数量</view>
+      <view class="count-selector">
+        <view class="count-btn {{count === 1 ? 'active' : ''}}" bindtap="selectCount" data-count="1">1</view>
+        <view class="count-btn {{count === 2 ? 'active' : ''}}" bindtap="selectCount" data-count="2">2</view>
+        <view class="count-btn {{count === 3 ? 'active' : ''}}" bindtap="selectCount" data-count="3">3</view>
+        <view class="count-btn {{count === 4 ? 'active' : ''}}" bindtap="selectCount" data-count="4">4</view>
+      </view>
+    </view>
+
+    <!-- 质量选择 -->
+    <view class="setting-row" bindtap="showQualityModal">
+      <view class="setting-label">质量</view>
+      <view class="setting-value">{{quality === 'standard' ? '标准' : '高清'}}</view>
+      <view class="setting-arrow">></view>
+    </view>
+
+    <!-- 生成按钮 -->
+    <button class="btn-primary" bindtap="generate" loading="{{isGenerating}}" disabled="{{isGenerating}}">
+      {{isGenerating ? '生成中...' : '开始生成'}}
+    </button>
+
+    <!-- 配额信息 -->
+    <view class="quota-info">
+      <text class="quota-label">剩余配额：</text>
+      <text class="quota-value">{{quota.remaining}}次</text>
+      <text class="quota-label" wx:if="{{quota.adCount >= 3}}">（今日广告次数已用完）</text>
+    </view>
+  </view>
+
+  <!-- 生成进度 -->
+  <view class="card fade-in" wx:if="{{isGenerating}}">
+    <view class="title">生成进度</view>
+    <view class="progress-container">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progress}}%"></view>
+      </view>
+      <view class="progress-text">{{progress}}% - 预计剩余{{estimatedTime}}秒</view>
+    </view>
+    <view class="loading-tips">
+      <view>🎨 AI正在努力创作中...</view>
+      <view>请稍候，不要关闭页面</view>
+    </view>
+  </view>
+
+  <!-- 结果展示 -->
+  <view class="card fade-in" wx:if="{{images.length > 0 && !isGenerating}}">
+    <view class="title">生成结果</view>
+    <view class="result-images">
+      <view class="result-item" wx:for="{{images}}" wx:for-index="idx" wx:key="idx">
+        <image class="result-image" src="{{item.url}}" mode="aspectFit" bindtap="previewImage" data-url="{{item.url}}"></image>
+        <view class="result-actions">
+          <button class="btn-small" bindtap="saveImage" data-url="{{item.url}}">保存</button>
+          <button class="btn-small btn-secondary" bindtap="shareImage" data-url="{{item.url}}">分享</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 尺寸选择弹窗 -->
+  <view class="modal {{showSizeModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">选择尺寸</view>
+      <view class="modal-options">
+        <view class="modal-option" wx:for="{{presetStyles[style].sizes}}" wx:for-index="idx" wx:key="idx" bindtap="selectSize" data-size="{{item}}">
+          <text class="option-text">{{item}}</text>
+          <text class="option-check {{size === item ? 'active' : ''}}">✓</text>
+        </view>
+      </view>
+      <button class="btn-secondary" bindtap="closeModal">取消</button>
+    </view>
+  </view>
+
+  <!-- 质量选择弹窗 -->
+  <view class="modal {{showQualityModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">选择质量</view>
+      <view class="modal-options">
+        <view class="modal-option" bindtap="selectQuality" data-quality="standard">
+          <text class="option-text">标准</text>
+          <text class="option-desc">生成速度快，适合预览</text>
+          <text class="option-check {{quality === 'standard' ? 'active' : ''}}">✓</text>
+        </view>
+        <view class="modal-option" bindtap="selectQuality" data-quality="high">
+          <text class="option-text">高清</text>
+          <text class="option-desc">生成速度慢，细节更丰富</text>
+          <text class="option-check {{quality === 'high' ? 'active' : ''}}">✓</text>
+        </view>
+      </view>
+      <button class="btn-secondary" bindtap="closeModal">取消</button>
+    </view>
+  </view>
+
+  <!-- 配额不足弹窗 -->
+  <view class="modal {{showQuotaModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">⚠️ 配额不足</view>
+      <view class="modal-text">今日免费配额已用完，您可以：</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="useRewardedVideoAd">观看广告获得3次</button>
+        <button class="btn-primary" bindtap="goToVip">开通VIP</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 结果弹窗 -->
+  <view class="modal {{showResultModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">🎉 生成成功！</view>
+      <view class="modal-text">您的AI作品已生成完成</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="closeModal">继续生成</button>
+        <button class="btn-primary" bindtap="goToGallery">查看画廊</button>
+      </view>
+    </view>
+  </view>
+</view>

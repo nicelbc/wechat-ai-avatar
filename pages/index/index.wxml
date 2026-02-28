@@ -1,0 +1,140 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="card fade-in">
+    <view class="title">欢迎使用AI头像生成器</view>
+    <view class="subtitle">让AI为你的头像增添无限可能</view>
+
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="user-name">{{userInfo.nickName}}</text>
+        <view class="user-tags">
+          <text class="tag" wx:if="{{isVip}}">VIP会员</text>
+          <text class="tag tag-free">剩余{{quota.remaining}}次</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="user-info" wx:else>
+      <view class="avatar-placeholder">👤</view>
+      <view class="user-details">
+        <text class="user-name">未登录</text>
+        <text class="user-desc">登录后可使用更多功能</text>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="btn-primary" wx:if="{{!userInfo}}" bindtap="handleLogin" loading="{{isLoading}}">
+        {{isLoading ? '登录中...' : '微信登录'}}
+      </button>
+      <button class="btn-secondary" wx:if="{{userInfo}}" bindtap="goToUser">个人中心</button>
+    </view>
+  </view>
+
+  <!-- 配额信息卡片 -->
+  <view class="card fade-in" style="animation-delay: 0.1s">
+    <view class="title">今日配额</view>
+    <view class="quota-info">
+      <view class="quota-item">
+        <text class="quota-label">免费生成</text>
+        <text class="quota-value">{{quota.remaining}}次</text>
+      </view>
+      <view class="quota-item">
+        <text class="quota-label">广告次数</text>
+        <text class="quota-value">{{quota.adCount}}/3</text>
+      </view>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(quota.remaining / 3) * 100}}%"></view>
+    </view>
+    <button class="btn-secondary" wx:if="{{quota.remaining <= 0}}" bindtap="goToVip">开通VIP无限生成</button>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="card fade-in" style="animation-delay: 0.2s">
+    <view class="title">快速开始</view>
+    <view class="grid">
+      <view class="grid-item" wx:for="{{features}}" wx:for-index="idx" wx:key="idx" bindtap="goToGenerate" data-page="{{item.page}}">
+        <view class="grid-item-icon">{{item.icon}}</view>
+        <view class="grid-item-text">{{item.title}}</view>
+        <view class="grid-item-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热门风格推荐 -->
+  <view class="card fade-in" style="animation-delay: 0.3s">
+    <view class="title">热门风格</view>
+    <view class="style-tags">
+      <view class="style-tag" wx:for="{{hotStyles}}" wx:for-index="idx" wx:key="idx" bindtap="goToGenerate" data-style="{{item.name}}">
+        <text class="style-icon">{{item.icon}}</text>
+        <text class="style-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- VIP特权预览 -->
+  <view class="vip-card fade-in" style="animation-delay: 0.4s" wx:if="{{!isVip}}">
+    <view class="vip-card-title">💎 VIP会员特权</view>
+    <view class="vip-card-text">无限生成 | 高清下载 | 专属风格 | 优先队列</view>
+    <button class="btn-primary" bindtap="goToVip">立即开通</button>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card fade-in" style="animation-delay: 0.5s">
+    <view class="title">快捷操作</view>
+    <view class="quick-actions">
+      <view class="list-item" bindtap="goToGenerate" data-style="avatar">
+        <view class="list-item-icon">✨</view>
+        <view class="list-item-content">
+          <view class="list-item-title">生成头像</view>
+          <view class="list-item-desc">输入描述词，生成专属头像</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+      <view class="list-item" bindtap="goToGallery">
+        <view class="list-item-icon">🖼️</view>
+        <view class="list-item-content">
+          <view class="list-item-title">我的画廊</view>
+          <view class="list-item-desc">查看历史生成记录</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+      <view class="list-item" bindtap="goToVip">
+        <view class="list-item-icon">💎</view>
+        <view class="list-item-content">
+          <view class="list-item-title">VIP会员</view>
+          <view class="list-item-desc">开通会员享受更多特权</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 登录弹窗 -->
+  <view class="modal {{showLoginModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">👋 欢迎使用</view>
+      <view class="modal-text">请先登录以使用AI头像生成功能</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="closeModal">稍后</button>
+        <button class="btn-primary" bindtap="handleLogin" loading="{{isLoading}}">
+          {{isLoading ? '登录中...' : '立即登录'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配额不足弹窗 -->
+  <view class="modal {{showQuotaModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">⚠️ 配额不足</view>
+      <view class="modal-text">今日免费配额已用完，您可以：</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="useRewardedVideoAd">观看广告获得3次</button>
+        <button class="btn-primary" bindtap="goToVip">开通VIP</button>
+      </view>
+    </view>
+  </view>
+</view>

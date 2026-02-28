@@ -1,0 +1,97 @@
+<!-- pages/gallery/gallery.wxml -->
+<view class="container">
+  <!-- 过滤器 -->
+  <view class="filter-bar fade-in">
+    <scroll-view class="filter-scroll" scroll-x>
+      <view class="filter-tags">
+        <view class="filter-tag {{currentFilter === item.key ? 'active' : ''}}"
+              wx:for="{{filters}}"
+              wx:for-index="idx"
+              wx:key="key"
+              bindtap="selectFilter"
+              data-key="{{item.key}}">
+          <text class="filter-name">{{item.name}}</text>
+          <text class="filter-count" wx:if="{{item.count > 0}}">{{item.count}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 图片网格 -->
+  <view class="image-grid fade-in" wx:if="{{filteredImages.length > 0}}">
+    <view class="grid-item" wx:for="{{filteredImages}}" wx:for-index="idx" wx:key="id" bindtap="showImageDetail" data-index="{{idx}}">
+      <image class="grid-image" src="{{item.url}}" mode="aspectFill"></image>
+      <view class="grid-overlay">
+        <view class="grid-style-tag">{{item.style}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state fade-in" wx:if="{{showEmpty && !isLoading}}">
+    <view class="empty-icon">🖼️</view>
+    <view class="empty-text">还没有生成过图片</view>
+    <view class="empty-text">快去生成你的专属头像吧！</view>
+    <button class="btn-primary" bindtap="goToGenerate">立即生成</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading fade-in" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 图片详情弹窗 -->
+  <view class="modal {{showImageModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content modal-large" catchtap="stopPropagation" wx:if="{{currentImage}}">
+      <view class="modal-title">图片详情</view>
+
+      <view class="image-preview-container">
+        <image class="image-preview" src="{{currentImage.url}}" mode="aspectFit" bindtap="previewImage" data-url="{{currentImage.url}}"></image>
+      </view>
+
+      <view class="image-info">
+        <view class="info-row">
+          <text class="info-label">风格：</text>
+          <text class="info-value">{{currentImage.style}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">描述：</text>
+          <text class="info-value">{{currentImage.prompt}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">尺寸：</text>
+          <text class="info-value">{{currentImage.size}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">时间：</text>
+          <text class="info-value">{{formatTime(currentImage.timestamp)}}</text>
+        </view>
+      </view>
+
+      <view class="modal-buttons">
+        <button class="btn-small" bindtap="saveImage" data-url="{{currentImage.url}}">保存</button>
+        <button class="btn-small btn-secondary" bindtap="shareImage" data-url="{{currentImage.url}}">分享</button>
+        <button class="btn-small btn-danger" bindtap="deleteImage" data-index="{{idx}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 清空确认弹窗 -->
+  <view class="modal {{showClearModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">清空画廊</view>
+      <view class="modal-text">确定要清空所有图片吗？此操作不可恢复。</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="closeModal">取消</button>
+        <button class="btn-danger" bindtap="clearAll">清空</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar" wx:if="{{filteredImages.length > 0}}">
+    <button class="btn-secondary" bindtap="goToGenerate">继续生成</button>
+    <button class="btn-danger" bindtap="clearAll">清空画廊</button>
+  </view>
+</view>

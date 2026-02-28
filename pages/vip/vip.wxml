@@ -1,0 +1,164 @@
+<!-- pages/vip/vip.wxml -->
+<view class="container">
+  <!-- 用户VIP状态卡片 -->
+  <view class="card fade-in">
+    <view class="user-profile" wx:if="{{userInfo}}">
+      <image class="profile-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="profile-info">
+        <text class="profile-name">{{userInfo.nickName}}</text>
+        <view class="profile-tags">
+          <text class="tag" wx:if="{{isVip}}">💎 VIP会员</text>
+          <text class="tag tag-free" wx:else>普通用户</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="user-profile" wx:else>
+      <view class="profile-avatar-placeholder">👤</view>
+      <view class="profile-info">
+        <text class="profile-name">未登录</text>
+        <text class="profile-desc">登录后可开通VIP会员</text>
+      </view>
+    </view>
+
+    <!-- VIP状态信息 -->
+    <view class="vip-status" wx:if="{{isVip && vipInfo.expireDate}}">
+      <view class="status-item">
+        <text class="status-label">会员状态</text>
+        <text class="status-value vip">已开通</text>
+      </view>
+      <view class="status-item">
+        <text class="status-label">开始时间</text>
+        <text class="status-value">{{vipInfo.startDate}}</text>
+      </view>
+      <view class="status-item">
+        <text class="status-label">到期时间</text>
+        <text class="status-value">{{vipInfo.expireDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- VIP特权介绍 -->
+  <view class="card fade-in" style="animation-delay: 0.1s">
+    <view class="title">💎 VIP会员特权</view>
+    <view class="features-list">
+      <view class="feature-item">
+        <view class="feature-icon">✨</view>
+        <view class="feature-content">
+          <view class="feature-title">无限生成次数</view>
+          <view class="feature-desc">随时随地生成AI头像和壁纸</view>
+        </view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🖼️</view>
+        <view class="feature-content">
+          <view class="feature-title">高清下载</view>
+          <view class="feature-desc">支持高清分辨率下载保存</view>
+        </view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🎨</view>
+        <view class="feature-content">
+          <view class="feature-title">专属风格</view>
+          <view class="feature-desc">解锁更多独家AI风格模板</view>
+        </view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">⚡</view>
+        <view class="feature-content">
+          <view class="feature-title">优先生成队列</view>
+          <view class="feature-desc">VIP专属服务器，更快生成速度</view>
+        </view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🚫</view>
+        <view class="feature-content">
+          <view class="feature-title">去广告</view>
+          <view class="feature-desc">纯净体验，无广告打扰</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- VIP套餐选择 -->
+  <view class="card fade-in" style="animation-delay: 0.2s">
+    <view class="title">选择套餐</view>
+    <view class="plans-container">
+      <view
+        class="plan-card {{selectedPlan === plan.id ? 'selected' : ''}}"
+        wx:for="{{vipPlans}}"
+        wx:for-item="plan"
+        wx:key="id"
+        bindtap="selectPlan"
+        data-plan="{{plan.id}}"
+      >
+        <view class="plan-header">
+          <text class="plan-name">{{plan.name}}</text>
+          <view class="popular-tag" wx:if="{{plan.popular}}">热门</view>
+        </view>
+        <view class="plan-price">
+          <text class="price-symbol">¥</text>
+          <text class="price-number">{{plan.price}}</text>
+          <text class="price-original" wx:if="{{plan.originalPrice}}">¥{{plan.originalPrice}}</text>
+          <text class="price-period">/{{plan.period}}</text>
+        </view>
+        <view class="plan-features">
+          <view class="feature-tag" wx:for="{{plan.features}}" wx:key="{{item}}">
+            {{item}}
+          </view>
+        </view>
+        <view class="plan-check" wx:if="{{selectedPlan === plan.id}}">
+          ✓ 已选择
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 购买按钮 -->
+  <view class="card fade-in" style="animation-delay: 0.3s">
+    <view class="action-buttons">
+      <button
+        class="btn-primary"
+        bindtap="purchaseVip"
+        loading="{{isLoading}}"
+        disabled="{{!userInfo || isLoading}}"
+      >
+        {{isLoading ? '处理中...' : '立即开通VIP'}}
+      </button>
+    </view>
+    <view class="payment-tips">
+      <text>💡 支持微信支付，开通后立即生效</text>
+    </view>
+  </view>
+
+  <!-- 激励视频广告体验 -->
+  <view class="card fade-in" style="animation-delay: 0.4s">
+    <view class="title">🎁 免费体验</view>
+    <view class="ad-card">
+      <view class="ad-content">
+        <view class="ad-title">观看广告，获得1天VIP体验</view>
+        <view class="ad-desc">完整观看广告可获得1天VIP体验权限</view>
+      </view>
+      <button class="btn-secondary" bindtap="useRewardedVideoAd">
+        观看广告
+      </button>
+    </view>
+  </view>
+
+  <!-- 支付弹窗 -->
+  <view class="modal {{showPayModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">确认支付</view>
+      <view class="modal-text" wx:if="{{selectedPlan}}">
+        <view>套餐：{{vipPlans.find(p => p.id === selectedPlan).name}}</view>
+        <view>价格：¥{{vipPlans.find(p => p.id === selectedPlan).price}}</view>
+      </view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="closeModal">取消</button>
+        <button class="btn-primary" bindtap="confirmPayment" loading="{{isLoading}}">
+          {{isLoading ? '支付中...' : '确认支付'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

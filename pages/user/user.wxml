@@ -1,0 +1,126 @@
+<!-- pages/user/user.wxml -->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="card fade-in">
+    <view class="user-profile" wx:if="{{userInfo}}">
+      <image class="profile-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="profile-info">
+        <text class="profile-name">{{userInfo.nickName}}</text>
+        <view class="profile-tags">
+          <text class="tag" wx:if="{{isVip}}">💎 VIP会员</text>
+          <text class="tag tag-free">剩余{{quota.remaining}}次</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="user-profile" wx:else>
+      <view class="profile-avatar-placeholder">👤</view>
+      <view class="profile-info">
+        <text class="profile-name">未登录</text>
+        <text class="profile-desc">登录后可使用更多功能</text>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="btn-primary" wx:if="{{!userInfo}}" bindtap="handleLogin" loading="{{isLoading}}">
+        {{isLoading ? '登录中...' : '微信登录'}}
+      </button>
+      <button class="btn-secondary" wx:if="{{userInfo}}" bindtap="handleLogout">退出登录</button>
+    </view>
+  </view>
+
+  <!-- VIP特权卡片 -->
+  <view class="vip-card fade-in" wx:if="{{!isVip}}" style="animation-delay: 0.1s">
+    <view class="vip-card-title">💎 VIP会员特权</view>
+    <view class="vip-card-text">无限生成 | 高清下载 | 专属风格 | 优先队列</view>
+    <view class="vip-price">
+      <text class="price-tag">¥9.9</text>
+      <text class="price-unit">/月</text>
+    </view>
+    <button class="btn-primary" bindtap="goToVip">立即开通</button>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="card fade-in" style="animation-delay: 0.2s">
+    <view class="title">生成统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{stats.totalGenerated}}</text>
+        <text class="stat-label">总生成</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.avatarCount}}</text>
+        <text class="stat-label">头像</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.wallpaperCount}}</text>
+        <text class="stat-label">壁纸</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.coupleCount}}</text>
+        <text class="stat-label">情侣</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配额信息 -->
+  <view class="card fade-in" style="animation-delay: 0.3s">
+    <view class="title">今日配额</view>
+    <view class="quota-info">
+      <view class="quota-item">
+        <text class="quota-label">免费生成</text>
+        <text class="quota-value">{{quota.remaining}}次</text>
+      </view>
+      <view class="quota-item">
+        <text class="quota-label">广告次数</text>
+        <text class="quota-value">{{quota.adCount}}/3</text>
+      </view>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(quota.remaining / 3) * 100}}%"></view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card fade-in" style="animation-delay: 0.4s">
+    <view class="title">快捷操作</view>
+    <view class="quick-actions">
+      <view class="list-item" bindtap="goToGenerate">
+        <view class="list-item-icon">✨</view>
+        <view class="list-item-content">
+          <view class="list-item-title">生成头像</view>
+          <view class="list-item-desc">输入描述词，生成专属头像</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+      <view class="list-item" bindtap="goToGallery">
+        <view class="list-item-icon">🖼️</view>
+        <view class="list-item-content">
+          <view class="list-item-title">我的画廊</view>
+          <view class="list-item-desc">查看历史生成记录</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+      <view class="list-item" bindtap="goToVip">
+        <view class="list-item-icon">💎</view>
+        <view class="list-item-content">
+          <view class="list-item-title">VIP会员</view>
+          <view class="list-item-desc">开通会员享受更多特权</view>
+        </view>
+        <view class="list-item-arrow">></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录弹窗 -->
+  <view class="modal {{showLogoutModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">确认退出</view>
+      <view class="modal-text">退出登录后，您的生成记录将保留在本地，但无法使用云端同步功能。</view>
+      <view class="modal-buttons">
+        <button class="btn-secondary" bindtap="closeModal">取消</button>
+        <button class="btn-danger" bindtap="confirmLogout">退出</button>
+      </view>
+    </view>
+  </view>
+</view>

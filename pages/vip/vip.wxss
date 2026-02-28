@@ -1,0 +1,294 @@
+/* pages/vip/vip.wxss */
+
+/* 用户资料 */
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.profile-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  border: 4rpx solid #07C160;
+  margin-right: 20rpx;
+}
+
+.profile-avatar-placeholder {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  margin-right: 20rpx;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.profile-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.profile-tags {
+  display: flex;
+  gap: 10rpx;
+  flex-wrap: wrap;
+}
+
+/* VIP状态信息 */
+.vip-status {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.status-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.status-value {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.status-value.vip {
+  color: #ff9800;
+}
+
+/* VIP特权列表 */
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+  padding: 15rpx;
+  background-color: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.feature-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: white;
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.feature-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* VIP套餐选择 */
+.plans-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.plan-card {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  background-color: #fff;
+  transition: all 0.2s;
+}
+
+.plan-card.selected {
+  border-color: #ff9800;
+  background: linear-gradient(135deg, #fff8e1, #fff);
+  box-shadow: 0 4rpx 15rpx rgba(255, 152, 0, 0.2);
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.plan-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.popular-tag {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: white;
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  font-weight: bold;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 15rpx;
+}
+
+.price-symbol {
+  font-size: 24rpx;
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.price-number {
+  font-size: 48rpx;
+  color: #ff9800;
+  font-weight: bold;
+  margin: 0 5rpx;
+}
+
+.price-original {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+  margin-right: 10rpx;
+}
+
+.price-period {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.plan-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.feature-tag {
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 20rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.plan-check {
+  margin-top: 15rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #ff9800;
+  font-weight: bold;
+}
+
+/* 支付提示 */
+.payment-tips {
+  margin-top: 15rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 广告体验卡片 */
+.ad-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border-radius: 15rpx;
+  border: 1rpx solid #c8e6c9;
+}
+
+.ad-content {
+  flex: 1;
+}
+
+.ad-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 8rpx;
+}
+
+.ad-desc {
+  font-size: 24rpx;
+  color: #558b2f;
+}
+
+/* 按钮区域 */
+.action-buttons {
+  display: flex;
+  gap: 15rpx;
+}
+
+.action-buttons .btn-primary,
+.action-buttons .btn-secondary {
+  flex: 1;
+  margin: 0;
+}
+
+/* 响应式设计 */
+@media (min-width: 750px) {
+  .plans-container {
+    flex-direction: row;
+    gap: 20rpx;
+  }
+
+  .plan-card {
+    flex: 1;
+  }
+
+  .ad-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}

@@ -1,0 +1,305 @@
+/* pages/generate/generate.wxss */
+
+/* 输入组 */
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.input-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.input {
+  background-color: #f5f5f5;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 15rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  min-height: 120rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #07C160;
+}
+
+.input-hint {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 预设风格 */
+.preset-section {
+  margin-bottom: 30rpx;
+}
+
+.preset-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 15rpx;
+}
+
+.preset-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background-color: #f0f0f0;
+  padding: 12rpx 18rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  transition: all 0.2s;
+}
+
+.preset-tag:active {
+  background-color: #e8f5e9;
+  transform: scale(0.95);
+}
+
+.preset-icon {
+  font-size: 28rpx;
+}
+
+.preset-name {
+  color: #333;
+  font-weight: 500;
+}
+
+/* 设置行 */
+.setting-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.setting-value {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.setting-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 数量选择器 */
+.count-selector {
+  display: flex;
+  gap: 10rpx;
+}
+
+.count-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 10rpx;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.count-btn:active {
+  transform: scale(0.95);
+}
+
+.count-btn.active {
+  background-color: #07C160;
+  color: white;
+}
+
+/* 配额信息 */
+.quota-info {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+  text-align: center;
+}
+
+.quota-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.quota-value {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #07C160;
+}
+
+/* 进度条 */
+.progress-container {
+  margin: 20rpx 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12rpx;
+  background-color: #e0e0e0;
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #07C160, #06AD56);
+  border-radius: 6rpx;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+}
+
+.loading-tips {
+  text-align: center;
+  color: #999;
+  font-size: 24rpx;
+  line-height: 1.8;
+  margin-top: 20rpx;
+}
+
+/* 结果展示 */
+.result-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.result-item {
+  background-color: #f8f8f8;
+  border-radius: 15rpx;
+  padding: 15rpx;
+}
+
+.result-image {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 10rpx;
+  margin-bottom: 15rpx;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.btn-small {
+  flex: 1;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  background-color: #07C160;
+  color: white;
+  border: none;
+  margin: 0;
+}
+
+.btn-small:active {
+  background-color: #06AD56;
+}
+
+.btn-small.btn-secondary {
+  background-color: #fff;
+  color: #333;
+  border: 1rpx solid #ddd;
+}
+
+/* 模态框选项 */
+.modal-options {
+  margin: 20rpx 0;
+}
+
+.modal-option {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: all 0.2s;
+}
+
+.modal-option:active {
+  background-color: #f5f5f5;
+}
+
+.modal-option:last-child {
+  border-bottom: none;
+}
+
+.option-text {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.option-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 10rpx;
+}
+
+.option-check {
+  font-size: 24rpx;
+  color: #ccc;
+  margin-left: 10rpx;
+}
+
+.option-check.active {
+  color: #07C160;
+  font-weight: bold;
+}
+
+/* 响应式设计 */
+@media (min-width: 750px) {
+  .result-images {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .preset-tags {
+    justify-content: center;
+  }
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 加载动画 */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
