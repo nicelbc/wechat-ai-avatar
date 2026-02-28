@@ -22,26 +22,26 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "images/home.png",
-        "selectedIconPath": "images/home-active.png"
+        "iconPath": "images/home.svg",
+        "selectedIconPath": "images/home-active.svg"
       },
       {
         "pagePath": "pages/generate/generate",
         "text": "生成",
-        "iconPath": "images/generate.png",
-        "selectedIconPath": "images/generate-active.png"
+        "iconPath": "images/generate.svg",
+        "selectedIconPath": "images/generate-active.svg"
       },
       {
         "pagePath": "pages/gallery/gallery",
         "text": "画廊",
-        "iconPath": "images/gallery.png",
-        "selectedIconPath": "images/gallery-active.png"
+        "iconPath": "images/gallery.svg",
+        "selectedIconPath": "images/gallery-active.svg"
       },
       {
         "pagePath": "pages/user/user",
         "text": "我的",
-        "iconPath": "images/user.png",
-        "selectedIconPath": "images/user-active.png"
+        "iconPath": "images/user.svg",
+        "selectedIconPath": "images/user-active.svg"
       }
     ]
   },
