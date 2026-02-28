@@ -1,5 +1,5 @@
 // pages/index/index.js
-// 修复版本 - 添加微信用户授权
+// 修复版本 - 不使用require()
 
 const app = getApp();
 
@@ -160,6 +160,7 @@ Page({
   },
 
   // 处理登录 - 包含用户授权
+  // 注意：wx.getUserProfile必须在用户点击事件中直接调用
   async handleLogin() {
     this.setData({ isLoading: true });
 
