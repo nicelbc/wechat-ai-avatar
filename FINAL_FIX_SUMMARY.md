@@ -140,6 +140,60 @@ const errorMessage = error && error.message ? error.message : '';
 if (errorMessage.includes('授权')) {
 ```
 
+### 6. 修复了用户信息处理逻辑
+**问题：** 即使授权成功，仍然显示默认用户信息
+
+**原因：** 原来的逻辑使用 `data.userInfo || { 默认信息 }`，这会导致：
+- 如果 `data.userInfo` 是空对象 `{}`，会使用默认信息
+- 如果 `data.userInfo` 没有 `openId` 字段，会使用默认信息
+
+**解决方案：** 改为检查 `data.userInfo.nickName` 是否存在
+```javascript
+// 修复前：
+const userInfo = data.userInfo || {
+  openId: userId,
+  nickName: '用户' + userId.substr(-4),
+  // ... 默认信息
+};
+
+// 修复后：
+let userInfo;
+if (data.userInfo && data.userInfo.nickName) {
+  // 使用真实的微信用户信息
+  userInfo = {
+    openId: userId,
+    nickName: data.userInfo.nickName,
+    avatarUrl: data.userInfo.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userId,
+    gender: data.userInfo.gender || 0,
+    city: data.userInfo.city || '未知',
+    province: data.userInfo.province || '未知',
+    country: data.userInfo.country || '未知'
+  };
+} else {
+  // 使用默认用户信息
+  userInfo = {
+    openId: userId,
+    nickName: '用户' + userId.substr(-4),
+    avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userId,
+    gender: Math.random() > 0.5 ? 1 : 2,
+    city: '北京',
+    province: '北京',
+    country: '中国'
+  };
+}
+```
+
+**微信用户信息说明：**
+- `wx.getUserProfile()` 成功时返回的 `res.userInfo` 包含：
+  - `nickName`: 用户昵称
+  - `avatarUrl`: 用户头像URL
+  - `gender`: 性别（1男，2女，0未知）
+  - `city`: 城市
+  - `province`: 省份
+  - `country`: 国家
+- 这些信息都是真实的微信用户信息，不会包含 `openId`
+- `openId` 需要由后端生成并返回
+
 ## 🧪 测试步骤
 
 ### 方法1：直接测试（推荐）

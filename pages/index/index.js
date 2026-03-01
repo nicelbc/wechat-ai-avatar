@@ -118,15 +118,34 @@ Page({
         response = new Promise((resolve) => {
           setTimeout(() => {
             const userId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-            const userInfo = data.userInfo || {
-              openId: userId,
-              nickName: '用户' + userId.substr(-4),
-              avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userId,
-              gender: Math.random() > 0.5 ? 1 : 2,
-              city: '北京',
-              province: '北京',
-              country: '中国'
-            };
+
+            // 如果有用户信息，使用真实的微信用户信息
+            // 如果没有，才使用默认用户信息
+            let userInfo;
+            if (data.userInfo && data.userInfo.nickName) {
+              // 使用真实的微信用户信息
+              userInfo = {
+                openId: userId,
+                nickName: data.userInfo.nickName,
+                avatarUrl: data.userInfo.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userId,
+                gender: data.userInfo.gender || 0,
+                city: data.userInfo.city || '未知',
+                province: data.userInfo.province || '未知',
+                country: data.userInfo.country || '未知'
+              };
+            } else {
+              // 使用默认用户信息
+              userInfo = {
+                openId: userId,
+                nickName: '用户' + userId.substr(-4),
+                avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userId,
+                gender: Math.random() > 0.5 ? 1 : 2,
+                city: '北京',
+                province: '北京',
+                country: '中国'
+              };
+            }
+
             const token = 'mock_token_' + userId;
 
             resolve({
@@ -194,6 +213,8 @@ Page({
             success: (res) => {
               console.log('✅ 用户授权成功');
               console.log('用户信息:', res.userInfo);
+              // wx.getUserProfile() 返回的 res.userInfo 包含：
+              // nickName, avatarUrl, gender, city, province, country
               resolve(res);
             },
             fail: (err) => {
